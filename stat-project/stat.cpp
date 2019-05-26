@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include <fstream>
 #include <algorithm>
 #include <cmath>
@@ -37,28 +38,37 @@ int mode(int array[], int size) {
 }
 double sd(int array[], int size)
 {
-	long double sum = 0, sd;
-	int meanValue = mean(array, size);
-//	cout << "mean:" << meanValue << endl;
+	unsigned long long int sum = 0, sd;
+	double meanValue = mean(array, size);
     for(int i = 0; i < size; ++i) {
-    	cout << "array[i]:" << array[i] << endl;
-    	cout << "meanValue:" << meanValue << endl;
-    	cout << "diff:" << array[i] - meanValue << endl;
-    	cout << "pow:" << (array[i] - meanValue)*(array[i] - meanValue) << endl;
-    	cout << "/size:" << (array[i] - meanValue)*(array[i] - meanValue) / size << endl;
-    	sum += pow(array[i] - meanValue, 2);
-    	cout << "sum:" << sqrt((array[i] - meanValue)*(array[i] - meanValue)) << endl;
-    	break;
-//    	cout << (array[i] - meanValue)*(array[i] - meanValue) / size << endl;
+    	double delta = array[i] - meanValue;
+    	sum = delta * delta;
+    	sum /= size - 1;
 	}
-//    	sum += (array[i] - meanValue)*(array[i] - meanValue) / size;
-		
-//        cout << pow(array[i] - meanValue, 2) << endl;
-    cout << "sum:" << sum << endl;
-	sd = sum / size;
-    return sd;
+    return sqrt(sum);
 }
-
+double percentile(int array[], int size, int percent) {
+	double position = (size+1) * percent / 100;
+	int lowerBound = position;
+	double delta = position - lowerBound;
+	
+	return array[lowerBound] + array[lowerBound+1] * delta;
+}
+int max(int array[], int size) {
+	int max = array[0];
+	for(int i = 1 ; i < size ; i ++) 
+		if(array[i] > max) max = array[i];
+	return max;
+}
+int min(int array[], int size) {
+	int min = array[0];
+	for(int i = 1 ; i < size ; i ++) 
+		if(array[i] < min) min = array[i];
+	return min;
+}
+int range(int array[], int size) {
+	return max(array, size) - min(array, size);
+}
 int main() {
 	const int PROVINCE_AMT = 76, YEAR_AMT = 10;
 	// Data preparation
@@ -80,10 +90,39 @@ int main() {
 	        data >> incomes[i][j];
 	    }
 	    sort(incomes[i], incomes[i] + YEAR_AMT);
-    	cout << setprecision(2) << sd(incomes[i], YEAR_AMT) << endl;
+    	cout << setprecision(2) << range(incomes[i], YEAR_AMT) << endl;
     	break;
 	}
 	
+	//GRAPH
+	int widthOfCell = 12;
+	cout << setw(widthOfCell) << "";
+	cout << "|" << setw(widthOfCell) << "Mean";
+	cout << "|" << setw(widthOfCell) << "Median";
+	cout << "|" << setw(widthOfCell) << "Mode";
+	cout << "|" << setw(widthOfCell) << "SD";
+	cout << "|" << setw(widthOfCell) << "Percentile 95";
+	cout << "|" << setw(widthOfCell) << "Percentile 90";
+	cout << "|" << setw(widthOfCell) << "Variance";
+	cout << "|" << setw(widthOfCell) << "Range" << endl;
+	
+	cout << setw(widthOfCell) << "2.a)";
+	int size_for_2a = PROVINCE_AMT*YEAR_AMT;
+	int data_for_2a[size_for_2a];
+	for(int i = 0, index_counter = 0; i < PROVINCE_AMT; i++) {
+		for(int j = 0 ; j < YEAR_AMT ; j++, index_counter++) {
+			cout << incomes[i][j] << endl;
+			data_for_2a[index_counter] = incomes[i][j];
+		}
+	}
+	cout << "|" << setw(widthOfCell) << mean(data_for_2a, size_for_2a);
+	cout << "|" << setw(widthOfCell) << "Median";
+	cout << "|" << setw(widthOfCell) << "Mode";
+	cout << "|" << setw(widthOfCell) << "SD";
+	cout << "|" << setw(widthOfCell) << "Percentile 95";
+	cout << "|" << setw(widthOfCell) << "Percentile 90";
+	cout << "|" << setw(widthOfCell) << "Variance";
+	cout << "|" << setw(widthOfCell) << "Range" << endl;
 //	for(int i = 0 ; i < PROVINCE_AMT; i++)  {
 //    	cout << provinces[i] << " ";
 //    	for (int j = 0; j < YEAR_AMT; j++) {
