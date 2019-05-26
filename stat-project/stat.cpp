@@ -86,16 +86,13 @@ int main() {
     
     for(int i = 0 ; i < PROVINCE_AMT; i++)  {
     	data >> provinces[i];
-    	for (int j = 0; j < YEAR_AMT; j++) {
+    	for (int j = 0; j < YEAR_AMT; j++) 
 	        data >> incomes[i][j];
-	    }
 	    sort(incomes[i], incomes[i] + YEAR_AMT);
-    	cout << setprecision(2) << range(incomes[i], YEAR_AMT) << endl;
-    	break;
 	}
 	
 	//GRAPH
-	int widthOfCell = 12;
+	int widthOfCell = 13;
 	cout << setw(widthOfCell) << "";
 	cout << "|" << setw(widthOfCell) << "Mean";
 	cout << "|" << setw(widthOfCell) << "Median";
@@ -111,18 +108,19 @@ int main() {
 	int data_for_2a[size_for_2a];
 	for(int i = 0, index_counter = 0; i < PROVINCE_AMT; i++) {
 		for(int j = 0 ; j < YEAR_AMT ; j++, index_counter++) {
-			cout << incomes[i][j] << endl;
+//			cout << incomes[i][j] << endl;
 			data_for_2a[index_counter] = incomes[i][j];
 		}
 	}
+	double sd_for_2a = sd(data_for_2a, size_for_2a);
 	cout << "|" << setw(widthOfCell) << mean(data_for_2a, size_for_2a);
-	cout << "|" << setw(widthOfCell) << "Median";
-	cout << "|" << setw(widthOfCell) << "Mode";
-	cout << "|" << setw(widthOfCell) << "SD";
-	cout << "|" << setw(widthOfCell) << "Percentile 95";
-	cout << "|" << setw(widthOfCell) << "Percentile 90";
-	cout << "|" << setw(widthOfCell) << "Variance";
-	cout << "|" << setw(widthOfCell) << "Range" << endl;
+	cout << "|" << setw(widthOfCell) << median(data_for_2a, size_for_2a);
+	cout << "|" << setw(widthOfCell) << mode(data_for_2a, size_for_2a);
+	cout << "|" << setw(widthOfCell) << sd_for_2a;
+	cout << "|" << setw(widthOfCell) << percentile(data_for_2a, size_for_2a, 95);
+	cout << "|" << setw(widthOfCell) << percentile(data_for_2a, size_for_2a, 90);
+	cout << "|" << setw(widthOfCell) << sd_for_2a*sd_for_2a;
+	cout << "|" << setw(widthOfCell) << range(data_for_2a, size_for_2a) << endl;
 //	for(int i = 0 ; i < PROVINCE_AMT; i++)  {
 //    	cout << provinces[i] << " ";
 //    	for (int j = 0; j < YEAR_AMT; j++) {
